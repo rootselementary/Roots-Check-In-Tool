@@ -20,18 +20,17 @@ block content
 							li
 								a(href='/student-tracker') Grove Monitor
 
-	h3.student-tracker-title Grove Monitor
+	h3.student-tracker-title
+		button.btn.btn-small.btn-primary.pull-right.all-absent All Absent
+		|Grove Monitor
 	
 	.row
 		.col-sm-2
 			ul.nav.nav-pills.nav-stacked(style="position:fixed; top: 66px")#location-filters
 				li
 					button.btn.btn-warning.btn-block All
-				li
-					button.btn.btn-info.btn-block Absent
+
 		.col-sm-10#locations-container
-			.row#Absent
-				h3 Absent
 
 block scripts
 	script(src='./build/StudentTracker.js')

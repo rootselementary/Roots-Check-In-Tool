@@ -7,6 +7,8 @@ module.exports = {
         SignIn: './public/js/signin.js',
         GroveCalendar: './public/js/grove-calendar.js',
         bundle: [
+            "./utils/StartTimes.js",
+            "./utils/GetCurrentEvent.js",
             "jquery",
             "lodash",
             "moment",

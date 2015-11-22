@@ -9,19 +9,25 @@ var userSchema = mongoose.Schema ({
 	absent: Boolean,
 	// calendar_id: String
 	recentScan: {
-		time: String,
+		time: Number,
 		event: [{
 			eventId: String,
 			location: String,
 			start: String,
 			end: String,
-			activity: String,
-			description: String,
-			focus_area: String,
-			summary: String
 		}],
 		scannedLocation: String,
 		correct: Boolean
+	},
+	recentCorrectScan: {
+		time: Number,
+		event: [{
+			eventId: String,
+			location: String,
+			start: String,
+			end: String,
+		}],
+		scannedLocation: String,
 	},
 	calendar: [{
 		eventId: String,
@@ -29,7 +35,7 @@ var userSchema = mongoose.Schema ({
 		creator: String,
 		start: String,
 		end: String,
-		description: String,
+		activity: String,
 		summary: String,
 	}],
 	groveCalendar: [{

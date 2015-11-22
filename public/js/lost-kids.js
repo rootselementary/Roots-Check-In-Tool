@@ -1,41 +1,90 @@
 // Requires
-
-var _ = require('lodash');
+var _      = require('lodash');
 var moment = require('moment');
-var $ = require('jquery');
+var $      = require('jquery');
 
-// Globals
+// Utils, bound to correct values for event and transition length
+var startTimes = _.partial( require('../../utils/StartTimes'), EVENT_LENGTH, TRANSITION_LENGTH);
 
-var studentsArray = [];
-var FILTER = 'All'
+/* 
+	Sorts first by status, showing students that are in the correct center first, and then sorts by first name alphabetically.
+	@params: Takes in two jQuery objects for use with jQuery's sort
+*/
 function sortByNameAndStatus(a, b) {
 	var an = $(a).attr('data-name'), bn = $(b).attr('data-name');
 
 	return $(b).hasClass('Found') - $(a).hasClass('Found') || (an > bn) - 1 || 1; 
 };
 
-// Class of student display
-var StudentLocationDisplay = function(student) {
-	this.data = _.pick(student, ['_id', 'email','name','image','googleId', 'absent']);
-	
+/* 
+	Put in a slight delay for student panels to display, then set them all to same height (Not currently using this implementation, but keeping it in case we want to switch back)
+*/
+function resizeDisplays() {
+	window.setTimeout(function(){
+		var displays = $('.studentLocationDisplay');
+
+		var heights = displays.map(function() {
+			return $(this).height()
+		});
+
+		var maxHeight = Math.max.apply(null, heights);
+
+		displays.height(maxHeight);
+	}, 500);
+}
+
+/*
+	Create a nice display out of a string by uppercasing each first letter
+*/
+function upperCaseFirst(string) {
+	return string.split(' ').map( function(word) {
+		return word[0].toUpperCase() + word.slice(1);
+	}).join(' ');
+}
+
+/* 
+	Creates the display for a student.
+	Have this as a general method instead of on the prototype because it is only called once.
+
+	@params student: the data for a student (NOTE: this is NOT the class instance, we must bind it for the click handler to properly attach)
+*/
+function createStudentDisplay(student) {
 	// Create the DOM element representing the student
-	var display = $('<div>').addClass('studentLocationDisplay').addClass('col-md-2').attr('id', student.googleId).attr('data-name', student.name);
+	var display = $('<div>')
+		.addClass('studentLocationDisplay')
+		.addClass('col-md-2')
+		.attr('id', student.googleId)
+		.attr('data-name', student.name);
+
 	var container = $('<div>').addClass('nameImageContainer');
-	var absentToggle = $('<button>').addClass('btn btn-xs btn-primary absent-toggle').text( student.absent ? 'Present' : 'Absent');
+
+	var absentToggle = $('<button>')
+		.addClass('btn btn-xs btn-primary absent-toggle')
+		.text( student.absent ? 'Present' : 'Absent');
 
 	var toggle = $('<div>').append(absentToggle);
+	var info   = $('<div>').addClass('studentInfoContainer')
+	var name   = $('<div>').addClass('name').text( student.name );
+	var img    = $('<div>').append( $('<img>').addClass('studentImage').attr('src', student.image) );
 
-	var info = $('<div>').addClass('studentInfoContainer')
-
-	container
-		.append('<div class="name">' + student.name + '</div>')
-		.append('<div><img class="studentImage" src="' +student.image+'"></div>');
+	container.append( name ).append( img );
 
 	display.append( container ).append( info ).append( toggle );
 	
 	absentToggle.on('click', this.toggleAbsent.bind(this));
 
-	this.el = display;
+	return display;
+}
+
+// Globals
+var studentsArray = [];
+var FILTER = 'All';
+
+// Class of student display
+var StudentLocationDisplay = function(student) {
+	this.data = _.pick(student, ['_id', 'email','name','image','googleId', 'absent']);
+
+	this.el = createStudentDisplay.call(this, student);
 
 	// If student is absent, no need to mess with any of the below data
 	if (student.absent) {
@@ -45,23 +94,24 @@ var StudentLocationDisplay = function(student) {
 	// Look at the student's recent scan to determine if they are in the correct place or not
 	else if (student.recentScan) {
 		scan = student.recentScan;
-		this.recentScan = scan;
+		
 		// First, check if the scan is recent (i.e. if that event is still ongoing)
 		var recent = false;
-		var event = scan.event ? scan.event[0] : undefined;
+		var event = scan.event[0];
 
 		// If google event, check against event end
-		if (event && event.end && moment(event.end).add(TRANSITION_LENGTH, 'ms').isAfter(moment())) {
+		if (event && event.end && moment(event.end).subtract(TRANSITION_LENGTH, 'ms').isAfter( Date.now() ) ) {
 			recent = true;
 		}
 		// If grove calendar, check against length of events
-		else if (event && !event.end && moment(scan.time).add(EVENT_LENGTH - TRANSITION_LENGTH, 'ms').isAfter(moment())) {
+		else if (event && !event.end && moment(scan.time).add(EVENT_LENGTH- TRANSITION_LENGTH, 'ms').isAfter( Date.now() ) ) {
 			recent = true;
 		}
 
 		// If the scan is recent
 		if (recent) {
-			this.moveMe(scan);
+			this.recentScan = scan;
+			this.onScan(scan);
 		} 
 		// If the scan is not recent, student is lost
 		else {
@@ -88,7 +138,12 @@ StudentLocationDisplay.prototype.toggleAbsent = function(e) {
 	$.post( '/api/user/', { id: this.data.googleId, absent: !this.data.absent }, self.updateDisplay.bind(self) );
 }
 
-// Updates student display based on most recent scan / event 
+/*
+	Updates the student's display
+	1. Check if they are absent or not
+	2. Update their classes and explanation text
+	3. If they are lost, we need to get their current event and display that as a correction, in addition to their recent scan, if any.
+*/ 
 StudentLocationDisplay.prototype.updateDisplay = function() {
 
 	if (this.status != 'Absent') {
@@ -111,20 +166,33 @@ StudentLocationDisplay.prototype.updateDisplay = function() {
 		this.el.removeClass('Lost').addClass('Found');
 		this.render();
 	}
-	// If the student is lost, do not display the last scan information
 	else if (this.status === 'Lost') {
 		var self = this;
 
 		// Call the API endpoint to get current event without a scan
 		$.get('/current-event/' + this.data.googleId, function(result) {
+
 			self.el.removeClass('Found').addClass('Lost');
 			
-			var correction = $('<p>').addClass('correct-location-info').addClass('text-primary').text(result.location);
-			self.el.find('.studentInfoContainer').empty().append(correction);
-			self.currentLocation = result && result.location || 'No Event';
+			var info = self.el.find('.studentInfoContainer');
+			info.empty()
 
-			self.render()
+			// Show correct location
+			$('<p>').addClass('correct-location-info text-primary')
+				.text(result.location)
+				.appendTo( info );
+
+			// If there is a recent scan, show where the student is based on that scan
+			if (self.recentScan) {
+				$('<p>').addClass('last-scan-info text-danger')
+					.text(self.recentScan.scannedLocation)
+					.appendTo( self.el.find('.studentInfoContainer') );
+			}
+
+			// Move location based on result
+			self.currentLocation = result.location;
 			
+			self.render()
 		});
 	} else if (this.status === 'Absent') {
 		this.el.removeClass('Found').addClass('Lost');
@@ -134,70 +202,65 @@ StudentLocationDisplay.prototype.updateDisplay = function() {
 	}
 };
 
+/*
+	Remove the student from their container and move to another, sorting the new container as needed.
+*/
 StudentLocationDisplay.prototype.render = function() {
-	// render into the dom based on where their location is
-	var locationId = this.currentLocation.split(' ').join('');
-	var location = $('#'+locationId)
+	// Remove if already in DOM
+	if (this.el) {
+		this.el.remove();
+	};
+
+	// Render into the dom based on where their location is
+	var location = $('#' + this.currentLocation.replace(/ /g, '') )
 	location.append(this.el);
+
+	/*
+		If we want to put students into a lost container as well as their own, this would be the start... but many issues to deal with, including:
+		1. The absent button event handler, properly binding to the student
+		2. Removing the clone as well as the el above
+		3. Making sure multiple copies don't show up
+		
+		if (this.status = 'Lost') {
+			$('#Lost').append( this.el.clone(true) );
+		}
+	*/
 
 	var locationArray = location.find('.studentLocationDisplay').sort( sortByNameAndStatus );
 
 	locationArray.detach().appendTo( location );
 
-	// Re-attach the absent click handler, was getting a strange bug where it did not always fire otherwise
-	this.el.find('.absent-toggle').off('click').on('click', this.toggleAbsent.bind(this) )
+	// Re-attach the absent click handler
+	this.el.find('.absent-toggle')
+		.off('click')
+		.on('click', this.toggleAbsent.bind(this) );
 };
 
-// Move the student to a new location based on the most recent scan
-StudentLocationDisplay.prototype.moveMe = function(scan) {
+/*
+	onScan will either be called based on a scan being received or if a student is automatically checked out based on the event being over.
+	1. Update their current location if there was a scan.
+	2. Update their status based on whether the scan was correct or not.
+	3. If there was a correct scan, set up a new timer.
+	4. Call updateDisplay
+*/
+StudentLocationDisplay.prototype.onScan = function(scan) {
 
 	var self = this;
 
-	// move from one array to another
-	if (this.el) {
-		this.el.remove();
-	};
-
-	// If this method was triggered by a scan, update the location to the location of the scan. If it was triggered by a timeout, leave the location as is.
-	if (scan) {
-		this.currentLocation = scan.scannedLocation;
-	}
-
 	if (scan && scan.correct) {
+		this.currentLocation = scan.scannedLocation;
 		this.status = 'Found';
-		// Set a timeout based on the end of the event, and move the student to Lost after the event is over as a placeholder until they scan into another event
 
-		var now = moment( new Date() );
+		// Get time until the event is over, either based on the event's end for google calendar events or the startTimes util for grove calendar events
+		var difference = scan.event[0].end ? moment(scan.event[0].end).subtract( TRANSITION_LENGTH, 'ms').diff( Date.now() ) : startTimes() + EVENT_LENGTH - TRANSITION_LENGTH;
 		
-		if (scan.event.end) {
-			var difference = moment(scan.event.end).subtract( TRANSITION_LENGTH, 'ms').diff( now );
-		}
-		else {
-			/* Split the hour based on EVENT_LENGTH and TRANSITION_LENGTH
-		    e.g. if events go for 15 with 5 min transition, 8:55 - 9:10 would
-		    be the period during which the timeout would be set for 9:10 */
-		    var intervals = 60 / (EVENT_LENGTH / (60 * 1000)) + 1;
-		    var start_times = [];
-		    for (var i =0; i < intervals; i++) {
-		      start_times.push( moment( new Date() ).startOf('hour').add(i * EVENT_LENGTH - TRANSITION_LENGTH, 'ms'));
-		    }
-
-		    var event_end = _.find(start_times, function(t) {
-		        return now.isBetween( t, moment(t).add( EVENT_LENGTH, 'ms' ) );
-		    }).add(EVENT_LENGTH, 'ms');
-
-			// Push student into lost after event ends and transition time has lapsed
-			var difference = event_end.diff(now);
-		}
-
-		this.transitionTimeout = window.setTimeout( self.moveMe.bind(self, null), difference);
+		this.transitionTimeout = window.setTimeout( self.onScan.bind(self, null), difference);
 	}
-	// If the scan does not match the location, the student is in the wrong location
+	// If the scan does not match the location, the student is lost
 	else if (scan) {
 		this.status = 'Lost';
 	}
-	// If there is no scan, this method is being triggered by the timeout, meaning the student has not scanned in to anywhere on time and is lost
-	// We need to get the student's next event and move them accordingly
+	// If there is no scan, the student is lost, and remove their recent scan
 	else {
 		this.status = 'Lost';
 		this.recentScan = null;
@@ -218,34 +281,33 @@ function scanReceived(scan) {
 	if (scanStudent) {
 		if (scanStudent.transitionTimeout) { window.clearTimeout(scanStudent.transitionTimeout); }
 		scanStudent.recentScan = scan;
-		// Call the moveMe function, making sure it is bound to the current student
-		scanStudent.moveMe.call(scanStudent, scan);
+		// Call the onScan function, making sure it is bound to the current student
+		scanStudent.onScan.call(scanStudent, scan);
 	}
 }
 
+/*
+	On page load:
+	1. Create filter buttons and container divs for all the different possible locations, and an extra one for 'Absent'.
+	2. Load all students using an AJAX call, make StudentLocationDisplay instances for each. Initiating the instance will also move the student to their initial location.
+*/
 $(function(){
-	
-	// Load the different button filters and divs
-	_.keys(LOCATION_IMAGES).forEach( function(location) {
-		// Manual override for iPad Center to avoid sentence casing
-		if (location.toLowerCase() === 'ipad center') {
-			var prettyDisplay = 'iPad Center';
-		} else {
-			var prettyDisplay = location.split(' ').map( function(word) {
-				return word[0].toUpperCase() + word.slice(1);
-			}).join(' ');
-		}
+	['Lost'].concat(_.keys(LOCATION_IMAGES ), 'Absent').forEach( function(location) {
+		
+		// Display, with special protection for iPad Center
+		var prettyDisplay = location.match(/ipad/i) ? 'iPad Center' : upperCaseFirst(location);
 
-		// Create the button and add it to button group
+		// Create the filter button and add it to button group
 		var button = $('<button>').addClass('btn btn-info btn-block').text(prettyDisplay);
 		var listItem = $('<li>').append(button);
 		$('#location-filters').append(listItem);
 
-		// Create the container for the students
-		// Title is just the location, the container id needs to have spaces removed
-		var title = $('<h3>').text(prettyDisplay);
-		var container = $('<div>').addClass('row').attr('id', prettyDisplay.split(' ').join('')).append(title);
-		$('#locations-container').append(container);
+		// Create the container
+		$('<div>')
+			.addClass('row')
+			.attr( 'id', prettyDisplay.replace(/ /g, '') )
+			.append( $('<h3>').text(prettyDisplay) )
+			.appendTo( $('#locations-container') );
 	});
 
 	// Attach event handler to the filter buttons
@@ -254,46 +316,42 @@ $(function(){
 		// Set filter
 		FILTER = $(this).text();
 
-		// Update display
+		// Update display, either showing all or hiding all except the one clicked
 		if (FILTER === 'All') {
 			$('#locations-container > div').show();
 		}
 		else {
-			// First, hide all containers
 			$('#locations-container > div').hide();
-
-			// Then show just the one with id matching the filter (spaces removed from filter)
-			$('#' + FILTER.split(' ').join('')).show();
+			$('#' + FILTER.replace(/ /g, '') ).show();
 		}
 
 		// Update the display of the filter buttons by removing primary from all and adding it to this one
-		$('#location-filters button.btn-warning').removeClass('btn-warning').addClass('btn-info');
-		$(this).removeClass('btn-info').addClass('btn-warning');
+		$('#location-filters button.btn-warning')
+			.removeClass('btn-warning')
+			.addClass('btn-info');
+		$(this)
+			.removeClass('btn-info')
+			.addClass('btn-warning');
 	});
-
-	// Get AJAX call to User database and get all the students, create StudentLocationDisplay objects for each, and put them in the students array
-	var tracker = io.connect();
-	tracker.on('SCAN!', scanReceived );
 	
+	// Once all the containers are set, make AJAX call to get all the students and create StudentLocationDisplay objects
 	$.get('api/user', function(students) {
 		studentsArray = _.map(students, function(student) {
 			return new StudentLocationDisplay(student);
 		});
-		
-		// Put in a slight delay for student panels to display, then set them all to same height (don't need this with css changes, but keeping it in case we want to go back to this method)
+	});
 
-		// window.setTimeout(function(){
-		// 	var displays = $('.studentLocationDisplay');
+	// Listen for scans
+	var tracker = io.connect();
+	tracker.on('SCAN!', scanReceived );
 
-		// 	var heights = displays.map(function() {
-		// 		return $(this).height()
-		// 	});
-
-		// 	var maxHeight = Math.max.apply(null, heights);
-
-		// 	displays.height(maxHeight);
-		// }, 500);
-		
+	// All absent event handler
+	$('.all-absent').on('click', function() {
+		$.ajax('/api/user/bulk', { 
+			type: 'PUT',
+			contentType: 'application/json',
+			data: JSON.stringify({ absent: true })
+		});
 	});
 	
 });

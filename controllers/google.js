@@ -41,13 +41,14 @@ var googleController = {
 					}
 				});
 			} else {
-				user.update({$set: getNotId(data) }, function(err, user) {
+				user.update({$set: getNotId(data) }, function(err, result) {
 					if (err) {
 						console.error(err);
 						res.send(err);
 					}
 					else {
-						res.send(user);
+						// Send back the entire use object, extended with the new data, because the update results just give us number of documents affected
+						res.send( _.extend(user, data) );
 					}
 				});
 			}	

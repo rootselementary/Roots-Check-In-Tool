@@ -1,10 +1,12 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var mongoose = require('mongoose');
 
 var indexController = require('./controllers/index.js');
 var googleController = require('./controllers/google.js');
 var apiController = require('./controllers/apiController.js');
+var teacherController = require('./controllers/teacherController.js');
 
 var app = express();
 app.set('view engine', 'jade');
@@ -12,6 +14,8 @@ app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+
 
 // SETUP MONGO
 var mongoDB_URL = process.env.MONGOLAB_URI || 'mongodb://localhost'
@@ -53,10 +57,21 @@ app.get('/student-tracker', function(req, res) {
 	indexController.studentTracker(req, res, socket);
 });
 
-// Student Full schedule 
+app.get('/teacher-login', function(req, res) {
+	indexController.teacherLogin(req, res, socket);
+});
+
+app.get('/grove-overview', function(req, res) {
+	indexController.groveOverview(req, res, socket);
+});
+
+
+// Student Full schedule
 app.get('/student-full-schedule', indexController.studentFullSchedule);
 
 //API Routes
+app.put('/api/user/bulk', apiController.bulkUpdateUsers);
+app.post('/api/teacher', teacherController.saveTeacher);
 app.post('/api/user', googleController.saveUser);
 app.get('/api/user', apiController.getUsers);
 app.get('/api/user/:id', apiController.getUser);
