@@ -47,7 +47,7 @@ window.CREATOR_IMAGES = {
 	'Dominic Hernandez': '<img src=https://s3-us-west-2.amazonaws.com/roots-checkin/assets/dominic.jpg" class="creator-image">',
 	'Idali Franco': '<img src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/idali.jpg" class="creator-image">',
 	'Daniel Rondeau': '<img src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/rondeau.jpg" class="creator-image">',
-	'Christina Noyes': '<img src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/christina.jpg" class="creator-image">'
+	'christina@rootselementary.org': '<img src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/christina.jpg" class="creator-image">'
 	
 };
 
