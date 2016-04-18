@@ -96,11 +96,14 @@ window.GET_ACTIVITY = function(description) {
 	else if (description.match('extra capital experts')) {
 		return '<img class="activity-image" src="https://maxcdn.icons8.com/Color/PNG/96/Sports/trophy-96.png" title="Trophy" width="48">';
 	}
-	else if (description.match('screening')) {
-		return '<img class="activity-image" src="http://www.jeffjonesillustration.com/images/illustration/01126-see-hear-eyes-and-ears.jpg">';
+	else if (description.match('problem of the day')) {
+		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/problem+of+the+day.PNG">';
 	}
-	else if (description.match('sight word trains')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/sight+word+trains.PNG">';
+	else if (description.match('shine time')) {
+		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/shinetime.jpg">';
+	}
+	else if (description.match('project wonder')) {
+		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/grow.jpg">';
 	}
 	else if (description.match("what's going on")) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/what%27s+going+on.PNG">';	
@@ -108,29 +111,11 @@ window.GET_ACTIVITY = function(description) {
 	else if (description.match("big universe")) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/biguniverse.PNG">';	
 	}
-	else if (description.match('cvc scramble')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/cvc+scramble.PNG">';
-	}
-	else if (description.match('mystery box')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/mysterybox.png">';
-	}
 	else if (description.match('español')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/espanol.jpg">';
 	}
 	else if (description.match('science lab')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/sciencelab.jpg">';
-	}
-	else if (description.match('match up')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/match+up.PNG">';
-	}
-	else if (description.match('match letter')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/matchletter.jpg">';
-	}
-	else if (description.match('meatball madness')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/meatballmadness.PNG">';
-	}
-	else if (description.match('cupcake')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/cupcake.PNG">';
 	}
 	else if (description.match('we are denver')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/denverskyline.jpg">';
@@ -138,18 +123,9 @@ window.GET_ACTIVITY = function(description) {
 	else if (description.match('duolingo')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/duolingo.png">';
 	}
-	else if (description.match('true or false')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/trueorfalse.PNG">';
-	}
-	else if (description.match('happy handwriting')) { 
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/happyhands.PNG">';
-	}
 	else if (description.match('st math')) {
 		return '<img class="activity-image" src="https://lh6.googleusercontent.com/naI3Chys6t4Kd2K_LCssvuxfuWacggw4UVq2aw46OYtl-9nXFJcGf1x_AVjjuiJcJLYJLfDnFw=s128-h128-e365">';
 	} 
-	else if (description.match('ice cream capitals')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/icecreamcapitals.PNG">';
-	}
 	else if (description.match('blocks')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/blocks.PNG">';
 	} 
@@ -164,9 +140,6 @@ window.GET_ACTIVITY = function(description) {
 	}
 	else if (description.match('science')) {
 		return '<img class="activity-image" src="https://maxcdn.icons8.com/windows8/PNG/64/Science/test_tube-64.png">';
-	}
-	else if (description.match('theatre')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/readerstheater.PNG">';
 	}
 	else if (description.match('writ')) {
 		return '<img class="activity-image" src="https://maxcdn.icons8.com/windows8/PNG/64/Editing/ball_point_pen-64.png">';
@@ -195,38 +168,8 @@ window.GET_ACTIVITY = function(description) {
 	else if (description.match('meditation')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/meditate.png">';
 	}
-	else if (description.match('counting game')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/countingtool.PNG">';
-	}
 	else if (description.match('personal narrative')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/personal+narratives.PNG">';
-	}
-	else if (description.match('number practice')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/numberpractice.PNG">';
-	}
-	else if (description.match('tower')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/tower.PNG">';
-	}
-	else if (description.match('build-a-word')) {
-		return '<img class="activity-image" src="https://maxcdn.icons8.com/Android_L/PNG/48/Baby/brick-48.png">';
-	}
- 	else if (description.match('sound round')) {
- 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/sound+roudn.png">';
-	}	
-	else if (description.match('letter time')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/letter+time.jpg">';
-	}
-	else if (description.match('beginning sounds')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/beginning+sounds.png">';
-	}
-	else if (description.match('cvc')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/cvc.jpg">';
-	}
-	else if (description.match('rhyming')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/rhyming.png">';
-	}
-	else if (description.match('read and build')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/read+and+build.PNG">';
 	}
 	else if (description.match('read')) {
 		return '<img class="activity-image" src="https://maxcdn.icons8.com/iOS7/PNG/75/Science/literature-75.png">';
@@ -236,15 +179,6 @@ window.GET_ACTIVITY = function(description) {
 	}
 	else if (description.match('kids')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/kidsaz.PNG">';
-	}
-	else if (description.match('pattern block pictures')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/patternblockpictures.PNG">';
-	}
-	else if (description.match('patterns')) {
-		return '<img class="activity-image" src="https://maxcdn.icons8.com/windows10/PNG/64/Data/workflow-64.png" title="Workflow" width="64">';
-	}
-	else if (description.match('sight word superstar!')) {
-		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/sightwordsuperstar.PNG">';
 	}
 	// For all of our predefined activities, if the name of the activity is in the summary somewhere, use that image
 	Object.keys(ACTIVITY_IMAGES).forEach( function(activity) {
