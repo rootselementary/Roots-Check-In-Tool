@@ -56,7 +56,7 @@ window.GROVE_ACTIVITIES = {
 	'Library Center': ['Level Reading', 'Buddy Reading','Story Book'],
 	'Writing Center':["Writer's Workshop", 'Personal Narrative'],
 	'Maker Center': ['Blocks', 'Legos','We Are Denver Architects'],
-	'iPad Center': ['ST Math', 'Big Universe', 'Tynker',"Kids A-Z", 'RazKids','ABC Phonics','Counting Game', 'Sight Word Ninja', 'Dreambox'],
+	'iPad Center': ['Lexia Core5','ST Math', 'Big Universe', 'Tynker',"Kids A-Z", 'RazKids','ABC Phonics','Counting Game', 'Sight Word Ninja', 'Dreambox'],
 	'Flex Center':['Patterns','Extra Capital Experts','Sight Word Trains', 'Happy Handwriting', 'CVC Scramble',  "What's going on?","True or False", 'Duolingo', 'Rhyming', 'Beginning Sounds', 'CVC', 'Read and Build!', "Build-a-word!", "Reader's Theatre",  "Sight Word Superstar!", "Match Up!", "Cupcake Wars!","Pattern Block Pictures", "Match Letter!", "Meatball Madness!", "Ice Cream Capitals" ]
 };
 
@@ -101,6 +101,12 @@ window.GET_ACTIVITY = function(description) {
 	}
 	else if (description.match('shine time')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/shinetime.jpg">';
+	}
+	else if (description.match('patterns')) {
+		return '<img class="activity-image" src="https://maxcdn.icons8.com/windows10/PNG/64/Data/workflow-64.png" width="64">';
+	}
+	else if (description.match('lexia')) {
+		return '<img class="activity-image" src="http://www.lexialearning.com/uploads/page-body/core5_icon1.png">';
 	}
 	else if (description.match('project wonder')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/grow.jpg">';
