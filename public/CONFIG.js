@@ -57,7 +57,7 @@ window.GROVE_ACTIVITIES = {
 	'Writing Center':["Writer's Workshop", 'Personal Narrative'],
 	'Maker Center': ['Blocks', 'Legos','We Are Denver Architects'],
 	'iPad Center': ['Lexia Core5','ST Math', 'Big Universe', 'Tynker',"Kids A-Z", 'RazKids','ABC Phonics','Counting Game', 'Sight Word Ninja', 'Dreambox'],
-	'Flex Center':['Patterns','Extra Capital Experts','Sight Word Trains', 'Happy Handwriting', 'CVC Scramble',  "What's going on?","True or False", 'Duolingo', 'Rhyming', 'Beginning Sounds', 'CVC', 'Read and Build!', "Build-a-word!", "Reader's Theatre",  "Sight Word Superstar!", "Match Up!", "Cupcake Wars!","Pattern Block Pictures", "Match Letter!", "Meatball Madness!", "Ice Cream Capitals" ]
+	'Flex Center':['Patterns','Extra Capital Experts']
 };
 
 // The list of all possible Focus Areas, and their associated pictures
