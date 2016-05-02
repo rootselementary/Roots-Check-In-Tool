@@ -57,7 +57,7 @@ window.GROVE_ACTIVITIES = {
 	'Writing Center':["Writer's Workshop", 'Personal Narrative'],
 	'Maker Center': ['Blocks', 'Legos','We Are Denver Architects'],
 	'iPad Center': ['Lexia Core5','ST Math', 'Big Universe', 'Tynker',"Kids A-Z", 'RazKids','ABC Phonics','Counting Game', 'Sight Word Ninja', 'Dreambox'],
-	'Flex Center':['Patterns','Extra Capital Experts']
+	'Flex Center':['Finger Gym!','Patterns','Extra Capital Experts']
 };
 
 // The list of all possible Focus Areas, and their associated pictures
@@ -93,8 +93,15 @@ window.GET_ACTIVITY = function(description) {
 	else if (description.match('math fact master')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/math+fact+monster.PNG">';
 	}
+	
+	else if (description.match('star testing')) {
+		return '<img class="activity-image" src="http://www.renaissance.com/portals/0/img/prod/logo_star360.png" title="STAR" width="48">';
+	}
 	else if (description.match('extra capital experts')) {
 		return '<img class="activity-image" src="https://maxcdn.icons8.com/Color/PNG/96/Sports/trophy-96.png" title="Trophy" width="48">';
+	}
+	else if (description.match('finger gym')) {
+		return '<img class="activity-image" src="https://maxcdn.icons8.com/iOS7/PNG/50/Sports/dumbbell-50.png" title="Dumbbell" width="50">';
 	}
 	else if (description.match('problem of the day')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/problem+of+the+day.PNG">';
