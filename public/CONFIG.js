@@ -98,7 +98,7 @@ window.GET_ACTIVITY = function(description) {
 		return '<img class="activity-image" src="http://www.renaissance.com/portals/0/img/prod/logo_star360.png" title="STAR" width="48">';
 	}
 	else if (description.match('write to 100')) {
-		return '<img class="activity-image" src="https://maxcdn.icons8.com/office/PNG/40/Editing/numbered_list-40.png" title="Numbered List" width="40">';
+		return '<img class="activity-image" src="https://maxcdn.icons8.com/office/PNG/80/Editing/numbered_list-80.png" title="Numbered List" width="40">';
 	}
 	else if (description.match('dive')) {
 		return '<img class="activity-image" src="https://maxcdn.icons8.com/iOS7/PNG/50/City/no_diving-50.png" title="Dive into Data" width="50">';
