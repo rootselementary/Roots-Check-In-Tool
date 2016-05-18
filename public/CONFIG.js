@@ -57,7 +57,7 @@ window.GROVE_ACTIVITIES = {
 	'Writing Center':["Writer's Workshop", 'Personal Narrative'],
 	'Maker Center': ['Blocks', 'Legos','We Are Denver Architects'],
 	'iPad Center': ['Lexia Core5','ST Math', 'Big Universe', 'Tynker',"Kids A-Z", 'RazKids','ABC Phonics','Counting Game', 'Sight Word Ninja', 'Dreambox'],
-	'Flex Center':['Write to 100!','Greatest to Least','Dive into Data','Finger Gym!','Patterns','Extra Capital Experts']
+	'Flex Center':['Quick Math!','Build and Trace','Write to 100!','Greatest to Least','Dive into Data','Finger Gym!','Patterns','Extra Capital Experts']
 };
 
 // The list of all possible Focus Areas, and their associated pictures
@@ -92,6 +92,13 @@ window.GET_ACTIVITY = function(description) {
 	}
 	else if (description.match('math fact master')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/math+fact+monster.PNG">';
+	}
+	
+	else if (description.match('build and trace')) {
+		return '<img class="activity-image" src="https://maxcdn.icons8.com/iOS7/PNG/75/Editing/ball_point_pen-75.png" title="Ball Point Pen" width="75">';
+	}
+	else if (description.match('quick math')) {
+		return '<img class="activity-image" src="https://maxcdn.icons8.com/Android/PNG/64/Animals/running_rabbit-64.png" title="Running Rabbit" width="64">';
 	}
 	
 	else if (description.match('star testing')) {
