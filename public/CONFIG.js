@@ -34,7 +34,7 @@ window.ACTIVITY_IMAGES = {
 
 // Images for event creator
 window.CREATOR_IMAGES = {
-	'Jill Carty': '<img src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/jill.jpg" class="creator-image">',
+	'Jill Tew': '<img src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/jill.jpg" class="creator-image">',
 	'Anna Stringfield': '<img src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/anna.jpg" class="creator-image">',
 	'Leksy Wolk': '<img src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/leksy.jpg" class="creator-image">',
 	'Mackenzie Wagner': '<img src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/mackenzie.jpg" class="creator-image">',
