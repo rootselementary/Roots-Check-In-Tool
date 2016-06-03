@@ -57,7 +57,7 @@ window.GROVE_ACTIVITIES = {
 	'Writing Center':["Writer's Workshop", 'Personal Narrative'],
 	'Maker Center': ['Blocks', 'Legos','We Are Denver Architects'],
 	'iPad Center': ['Lexia Core5','ST Math', 'Big Universe', 'Tynker',"Kids A-Z", 'RazKids','ABC Phonics','Counting Game', 'Sight Word Ninja', 'Dreambox'],
-	'Flex Center':['Sound it out in Sand','Comprehension Challenge','Quick Math!','Build and Trace','Write to 100!','Greatest to Least','Dive into Data','Finger Gym!','Patterns','Extra Capital Experts']
+	'Flex Center':['Junior Monopoly','Sentence School','Sound it out in Sand','Comprehension Challenge','Quick Math!','Build and Trace','Write to 100!','Greatest to Least','Dive into Data','Finger Gym!','Patterns','Extra Capital Experts']
 };
 
 // The list of all possible Focus Areas, and their associated pictures
@@ -95,6 +95,12 @@ window.GET_ACTIVITY = function(description) {
 	}
 	else if (description.match('tynker')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/tynker.png">';
+	}
+	else if (description.match('monopoly')) {
+		return '<img class="activity-image" src="http://ecx.images-amazon.com/images/I/51yxNpt1mIL._SY300_.jpg">';
+	}
+	else if (description.match('sentence school')) {
+		return '<img class="activity-image" src="https://maxcdn.icons8.com/Color/PNG/96/Household/book_shelf-96.png" title="Book Shelf" width="96">';
 	}
 	else if (description.match('math fact master')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/math+fact+monster.PNG">';
