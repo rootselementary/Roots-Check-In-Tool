@@ -100,7 +100,7 @@ window.GET_ACTIVITY = function(description) {
 		return '<img class="activity-image" src="http://ecx.images-amazon.com/images/I/51yxNpt1mIL._SY300_.jpg">';
 	}
 	else if (description.match('sentence school')) {
-		return '<img class="activity-image" src="https://maxcdn.icons8.com/Color/PNG/96/Household/book_shelf-96.png" title="Book Shelf" width="96">';
+		return '<img class="activity-image" src="https://maxcdn.icons8.com/Color/PNG/96/Science/classroom-96.png" title="Classroom" width="96">';
 	}
 	else if (description.match('math fact master')) {
 		return '<img class="activity-image" src="https://s3-us-west-2.amazonaws.com/roots-checkin/assets/math+fact+monster.PNG">';
