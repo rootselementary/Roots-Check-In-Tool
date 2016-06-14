@@ -43,7 +43,7 @@ button {
 
 iframe[src^="https://apis.google.com"] {
 	display: none;
-	
+
 }
 
 .locationImage {

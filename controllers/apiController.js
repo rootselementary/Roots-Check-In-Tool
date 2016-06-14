@@ -1,6 +1,7 @@
 // Requires
 var _ = require('lodash');
 var moment = require('moment');
+var moment_timezone = require('moment-timezone');
 var Scan = require('../models/Scan');
 var User = require('../models/user');
 
@@ -12,11 +13,12 @@ var EVENT_LENGTH = Number(process.env.EVENT_LENGTH) || 15;
 EVENT_LENGTH = EVENT_LENGTH * 60 * 1000;
 
 // Utils, bound to correct values for event and transition length
-var startTimes = _.partial( require('../utils/StartTimes'), EVENT_LENGTH, TRANSITION_LENGTH ); 
+var startTimes = _.partial( require('../utils/StartTimes'), EVENT_LENGTH, TRANSITION_LENGTH );
 var getCurrentEvent = _.partialRight( require('../utils/GetCurrentEvent'), EVENT_LENGTH, TRANSITION_LENGTH );
 
 /*
-	Currently not using this implementation, but keeping this around if we want to switch back. This waits until the event is over before checking a student in. 
+	Currently not using this implementation, but keeping this around if we want to switch back.
+	This waits until the event is over before checking a student in.
 
 	@param userModel: A mongoose User model item corresponding to the student
 	@param index: A number representing the index of grove calendar event to check in
@@ -30,7 +32,7 @@ function checkInLater(userModel, index) {
 		modelItem.save(function(err, result) {
 			console.log('result of save:', err, result)
 		});
-	}, diff, userModel, index);	
+	}, diff, userModel, index);
 }
 
 var apiController = {
@@ -45,7 +47,7 @@ var apiController = {
 			}
 		});
 	},
-	
+
 	// Return one user
 	getUser: function(req, res) {
 		User.findOne({googleId: req.params.id}, function(err, user) {
@@ -79,7 +81,7 @@ var apiController = {
 				} else if (!user) {
 					res.status(404).send("Student not found");
 				} else {
-					/* 
+					/*
 						Get the current event. If nothing is returned, that means either there is no event and no grove calendar (we send an error), or the student has checked into all of their grove events, in which case we will want to uncheck them all and start at the top.
 					*/
 
@@ -96,13 +98,14 @@ var apiController = {
 
 					// Was it correct?
 					var correct = currentEvent.location === scanned_data;
-				
+
 					var newScan = {
 						googleId: user.googleId,
 						name: user.name,
 						email: user.email,
 						image: user.image,
 						time: Date.now(),
+						formattedTime: moment_timezone().tz("America/Denver").format('MMMM Do YYYY, h:mm:ss a'),
 						scannedLocation: scanned_data,
 						event: [currentEvent],
 						correct: correct
@@ -201,7 +204,7 @@ var apiController = {
 				console.error(err)
 				res.status(500).send(err);
 			} else {
-				res.send(_.map(users, function(user) { 
+				res.send(_.map(users, function(user) {
 					return _.pick(user, ['_id', 'email', 'name', 'image', 'googleId', 'groveCalendar']);
 				}));
 			}
@@ -232,4 +235,4 @@ var apiController = {
 	}
 };
 
-module.exports = apiController; 
+module.exports = apiController;
